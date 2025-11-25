@@ -1,4 +1,4 @@
-# Bottomless Drop
+# FileWell
 
 A minimalist, recursive file system explorer built with React and Tailwind CSS. A clean, drag-and-drop interface for managing files and folders—all.
 
