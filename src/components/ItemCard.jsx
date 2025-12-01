@@ -107,7 +107,7 @@ export default function FolderCard({ id, item, type }) {
           <div
             ref={popoverRef}
             onClick={(e) => e.stopPropagation()}
-            className="absolute left-1/2 -translate-x-1/2"
+            className="absolute left-1/2 -translate-x-1/2 z-1"
           >
             <Popover id={id} type={type} closePopover={() => setShowPopover(false)} />
           </div>
