@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 
 import useFolderStore from "../store/useFolderStore";
 
@@ -6,6 +6,7 @@ import Popover from "./Popover";
 
 export default function FolderCard({ id, item, type }) {
   const popoverRef = useRef(null);
+  const cardRef = useRef(null);
   const {
     setParentId,
     selectedItemId,
@@ -42,10 +43,8 @@ export default function FolderCard({ id, item, type }) {
 
   useEffect(() => {
     function handleClickOutside(event) {
-      // If click is outside both the popover and this folder card, deselect
-      const card = event.currentTarget || null;
+      const clickedInsideCard = cardRef.current && cardRef.current.contains(event.target);
       const clickedInsidePopover = popoverRef.current && popoverRef.current.contains(event.target);
-      const clickedInsideCard = card && card.contains && card.contains(event.target);
       if (!clickedInsidePopover && !clickedInsideCard) {
         setOpenPopoverId(null);
         setSelectedItemId(null);
@@ -58,6 +57,7 @@ export default function FolderCard({ id, item, type }) {
   return (
     <div
       key={id}
+      ref={cardRef}
       draggable
       onDragStart={(e) => {
         e.dataTransfer.setData(
@@ -121,20 +121,23 @@ export default function FolderCard({ id, item, type }) {
         </button>
 
         {/* trigger popover */}
-        {showPopover && (
-          <div
-            ref={popoverRef}
-            onClick={(e) => e.stopPropagation()}
-            onDoubleClick={(e) => e.stopPropagation()}
-            className="absolute left-1/2 -translate-x-1/2 z-1"
-          >
+        <div
+          ref={popoverRef}
+          onClick={(e) => e.stopPropagation()}
+          onDoubleClick={(e) => e.stopPropagation()}
+          className={`absolute left-1/2 -translate-x-1/2 z-1 transition-all duration-200 ease-out ${showPopover ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-50 pointer-events-none'}`}
+          style={{
+            transform: showPopover ? 'translate(-50%, 0) scale(1)' : 'translate(-50%, 0) scale(0.5)',
+          }}
+        >
+          {showPopover && (
             <Popover
               id={id}
               type={type}
               closePopover={() => setOpenPopoverId(null)}
             />
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
