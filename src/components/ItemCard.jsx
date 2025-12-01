@@ -97,6 +97,7 @@ export default function FolderCard({ id, item, type }) {
         <span
           id="item-option"
           onClick={handleOptionsClick}
+          onDoubleClick={(e) => e.stopPropagation()}
           className="flex items-center text-lg text-center h-full px-2 hover:bg-neutral-600"
         >
           ⁝
@@ -107,6 +108,7 @@ export default function FolderCard({ id, item, type }) {
           <div
             ref={popoverRef}
             onClick={(e) => e.stopPropagation()}
+            onDoubleClick={(e) => e.stopPropagation()}
             className="absolute left-1/2 -translate-x-1/2 z-1"
           >
             <Popover id={id} type={type} closePopover={() => setShowPopover(false)} />
