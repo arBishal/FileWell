@@ -27,12 +27,13 @@ A minimalist, recursive file system explorer built with React and Tailwind CSS. 
 
 ### To-Implement
 
+- Convert to TypeScript
+- Back button
 - Rename folders/files in-place
 - Sort folders/files
 - Add color suppport
 - Open/preview files
-- Details panel
-- Intro panel
+- Dynamic Details Panel
 - Use IndexedDB instead of Local Storage
 
 
