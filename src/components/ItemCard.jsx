@@ -39,8 +39,8 @@ export default function FolderCard({ id, item, type }) {
     function handleClickOutside(event) {
       if (popoverRef.current && !popoverRef.current.contains(event.target)) {
         setShowPopover(false);
+        setSelectedItemId(null);
       }
-      setSelectedItemId(null);
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -94,14 +94,17 @@ export default function FolderCard({ id, item, type }) {
 
       {/* right elements */}
       <div className="h-full relative">
-        <span
+        <button
           id="item-option"
+          type="button"
+          aria-label="item options"
           onClick={handleOptionsClick}
           onDoubleClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
           className="flex items-center text-lg text-center h-full px-2 hover:bg-neutral-600"
         >
           ⁝
-        </span>
+        </button>
 
         {/* trigger popover */}
         {showPopover && (

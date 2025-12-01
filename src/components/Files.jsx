@@ -1,7 +1,7 @@
 import ItemCard from "./ItemCard";
 import useFolderStore from "../store/useFolderStore";
 
-export default function Folders() {
+export default function Files() {
   const { folders, parentId } = useFolderStore();
   const currentFolder = folders[parentId];
   return (

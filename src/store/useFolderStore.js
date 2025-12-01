@@ -7,8 +7,8 @@ const getInitialFolders = () => {
   }
 
   return {
-    0: {
-      id: 0,
+    "0": {
+      id: "0",
       name: "root",
       parent: null,
       children: [],
@@ -21,7 +21,7 @@ const generateUniqueId = () => crypto.randomUUID();
 
 const useFolderStore = create((set) => ({
   // initial state
-  parentId: 0,
+  parentId: "0",
   folders: getInitialFolders(),
   selectedItemId: null,
 
@@ -79,7 +79,7 @@ const useFolderStore = create((set) => ({
       const updated = { ...state.folders };
 
       const parentId = updated[id].parent;
-      if (parentId !== null) {
+      if (parentId != null && updated[parentId]) {
         updated[parentId].children = updated[parentId].children.filter(
           (childId) => childId !== id
         );
@@ -119,18 +119,19 @@ const useFolderStore = create((set) => ({
     set((state) => {
       const folders = {...state.folders};
 
-      if(!folders[targetFolderId]) {
+      // ensuring the target folder exists
+      if (!(targetFolderId in folders)) {
         return;
       }
 
       if(type === "folder") {
         const draggedFoldder = folders[draggedItemId];
-        if(!draggedFoldder || draggedItemId === targetFolderId) {
+        if (draggedFoldder == null || draggedItemId === targetFolderId) {
           return {};
         }
 
         const currentParentId = draggedFoldder.parent;
-        if(currentParentId !== null && folders[currentParentId]) {
+        if (currentParentId != null && folders[currentParentId]) {
           folders[currentParentId].children = folders[currentParentId].children.filter(
             (childId) => childId !== draggedItemId
           );
@@ -148,7 +149,7 @@ const useFolderStore = create((set) => ({
           }
         }
 
-        if(!parentFolderId) {
+        if (parentFolderId == null) {
           return {};
         }
 
@@ -156,7 +157,7 @@ const useFolderStore = create((set) => ({
           (file) => file.id === draggedItemId
         );
         
-        if(!draggedFile) {
+        if (draggedFile == null) {
           return {};
         }
 

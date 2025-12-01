@@ -55,20 +55,22 @@ export default function Popover({ id, type, closePopover }) {
   };
 
   return (
-    <div className="flex flex-col z-20">
-      <span
+    <div className="flex flex-col z-20" role="menu">
+      <button
+        type="button"
         onClick={handleRename}
-        className="px-4 py-2 rounded-t cursor-pointer bg-neutral-950 hover:bg-neutral-700"
+        className="px-4 py-2 rounded-t text-left bg-neutral-950 hover:bg-neutral-700"
       >
         Rename
-      </span>
+      </button>
       <hr className="border-[1px] border-neutral-800" />
-      <span
+      <button
+        type="button"
         onClick={handleRemove}
-        className="px-4 py-2 rounded-b cursor-pointer bg-neutral-950 hover:bg-neutral-700"
+        className="px-4 py-2 rounded-b text-left bg-neutral-950 hover:bg-neutral-700"
       >
         Remove
-      </span>
+      </button>
     </div>
   );
 }

@@ -2,12 +2,12 @@ export default function Breadcrumbs({currentFolder, setCurrentFolder, folders}) 
     const path = [];
     let tempId = currentFolder;
 
-    while(tempId !== 0 && folders[tempId]) {
+    while(tempId !== "0" && folders[tempId]) {
         path.push(folders[tempId]);
         tempId = folders[tempId].parent;
     }
 
-    path.push({id: 0, name: "root"});
+    path.push({id: "0", name: "root"});
     path.reverse();
 
   return (
