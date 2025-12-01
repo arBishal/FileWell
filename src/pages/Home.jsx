@@ -50,11 +50,7 @@ export default function Home() {
   return (
     <div className="h-full w-full flex flex-col flex-grow">
       <div className="flex flex-col sm:flex-row items-center justify-between">
-        <Breadcrumbs
-          currentFolder={parentId}
-          setCurrentFolder={setParentId}
-          folders={folders}
-        />
+        <Breadcrumbs />
         <ActionButtons
           handleFolderCreation={handleFolderCreation}
           handleUploadClick={handleUploadClick}
@@ -69,7 +65,7 @@ export default function Home() {
       </div>
       <div className="bg-neutral-900 rounded-b-2xl p-6 w-full h-full flex flex-col gap-1">
         <h2 className="font-bold text-lg"> folders </h2>
-        <Folders folders={folders} parentId={parentId} />
+        <Folders />
         <hr className="border-neutral-800 my-6" />
         <h2 className="font-bold text-lg"> files </h2>
         <Files />
