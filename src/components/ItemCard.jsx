@@ -1,16 +1,21 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 
 import useFolderStore from "../store/useFolderStore";
 
 import Popover from "./Popover";
 
 export default function FolderCard({ id, item, type }) {
-  const [showPopover, setShowPopover] = useState(false);
   const popoverRef = useRef(null);
-
-  const { setParentId, selectedItemId, setSelectedItemId, moveitemIntoFolder } =
-    useFolderStore();
+  const {
+    setParentId,
+    selectedItemId,
+    setSelectedItemId,
+    moveitemIntoFolder,
+    openPopoverId,
+    setOpenPopoverId,
+  } = useFolderStore();
   const isSelected = selectedItemId === id;
+  const showPopover = openPopoverId === id;
 
   const handleSingleClick = () => {
     setSelectedItemId(id);
@@ -25,41 +30,48 @@ export default function FolderCard({ id, item, type }) {
   const handleOptionsClick = (e) => {
     e.stopPropagation();
     setSelectedItemId(id);
-    setShowPopover((prev) => !prev);
+    setOpenPopoverId(openPopoverId === id ? null : id);
   };
 
   const handleDrop = (draggedItemId, targetFolderId, draggedItemType) => {
-    if(draggedItemId === targetFolderId) {
+    if (draggedItemId === targetFolderId) {
       return;
     }
     moveitemIntoFolder(draggedItemId, targetFolderId, draggedItemType);
-  }
+  };
 
   useEffect(() => {
     function handleClickOutside(event) {
-      if (popoverRef.current && !popoverRef.current.contains(event.target)) {
-        setShowPopover(false);
+      // If click is outside both the popover and this folder card, deselect
+      const card = event.currentTarget || null;
+      const clickedInsidePopover = popoverRef.current && popoverRef.current.contains(event.target);
+      const clickedInsideCard = card && card.contains && card.contains(event.target);
+      if (!clickedInsidePopover && !clickedInsideCard) {
+        setOpenPopoverId(null);
         setSelectedItemId(null);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [setOpenPopoverId, setSelectedItemId]);
 
   return (
     <div
       key={id}
       draggable
       onDragStart={(e) => {
-        e.dataTransfer.setData("application/json", JSON.stringify({ id, type }));
-      }} 
+        e.dataTransfer.setData(
+          "application/json",
+          JSON.stringify({ id, type })
+        );
+      }}
       onDragOver={(e) => {
-        if(type === "folder") {
+        if (type === "folder") {
           e.preventDefault();
         }
       }}
       onDrop={(e) => {
-        if(type === "folder") {
+        if (type === "folder") {
           const data = JSON.parse(e.dataTransfer.getData("application/json"));
           handleDrop(data.id, id, data.type);
         }
@@ -101,7 +113,9 @@ export default function FolderCard({ id, item, type }) {
           onClick={handleOptionsClick}
           onDoubleClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
-          className="flex items-center text-lg text-center h-full px-2 hover:bg-neutral-600"
+          className={`flex items-center text-lg text-center h-full px-2  rounded-sm cursor-pointer ${
+            isSelected ? "hover:bg-neutral-600/50" : "hover:bg-neutral-700/50"
+          }`}
         >
           ⁝
         </button>
@@ -114,7 +128,11 @@ export default function FolderCard({ id, item, type }) {
             onDoubleClick={(e) => e.stopPropagation()}
             className="absolute left-1/2 -translate-x-1/2 z-1"
           >
-            <Popover id={id} type={type} closePopover={() => setShowPopover(false)} />
+            <Popover
+              id={id}
+              type={type}
+              closePopover={() => setOpenPopoverId(null)}
+            />
           </div>
         )}
       </div>

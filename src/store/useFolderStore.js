@@ -20,6 +20,7 @@ const useFolderStore = create(
       parentId: "0",
       folders: getInitialFolders(),
       selectedItemId: null,
+      openPopoverId: null,
 
       // setters
       setParentId: (id) => set({ parentId: id }),
@@ -30,7 +31,8 @@ const useFolderStore = create(
 
           return { folders: nextFolders };
         }),
-      setSelectedItemId: (id) => set({ selectedItemId: id }),
+  setSelectedItemId: (id) => set({ selectedItemId: id }),
+  setOpenPopoverId: (id) => set({ openPopoverId: id }),
 
       // actions
       createFolder: (parentId, folderName) =>
